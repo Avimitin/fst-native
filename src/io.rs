@@ -37,12 +37,12 @@ impl std::fmt::Display for ReaderError {
 
 impl std::error::Error for ReaderError {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
-        match self.kind {
-            ReaderErrorKind::IO(e) => Some(&e),
-            ReaderErrorKind::StringParse(e) => Some(&e),
-            ReaderErrorKind::StringParse2(e) => Some(&e),
-            ReaderErrorKind::DecompressLz4(e) => Some(&e),
-            ReaderErrorKind::ParseInt(e) => Some(&e),
+        match &self.kind {
+            ReaderErrorKind::IO(e) => Some(e),
+            ReaderErrorKind::StringParse(e) => Some(e),
+            ReaderErrorKind::StringParse2(e) => Some(e),
+            ReaderErrorKind::DecompressLz4(e) => Some(e),
+            ReaderErrorKind::ParseInt(e) => Some(e),
             _ => None,
         }
     }

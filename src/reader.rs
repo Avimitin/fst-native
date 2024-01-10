@@ -48,11 +48,11 @@ impl FstFilter {
         }
     }
 
-    pub fn filter_signals(signals: Vec<FstSignalHandle>) -> Self {
+    pub fn filter_signals(signals: impl Into<Vec<FstSignalHandle>>) -> Self {
         FstFilter {
             start: 0,
             end: None,
-            include: Some(signals),
+            include: Some(signals.into()),
         }
     }
 }
