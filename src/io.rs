@@ -23,9 +23,29 @@ pub enum ReaderErrorKind {
     EnumTableString(),
     ParseInt(std::num::ParseIntError),
 }
+
 #[derive(Debug)]
 pub struct ReaderError {
     pub(crate) kind: ReaderErrorKind,
+}
+
+impl std::fmt::Display for ReaderError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{:?}", self.kind)
+    }
+}
+
+impl std::error::Error for ReaderError {
+    fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
+        match self.kind {
+            ReaderErrorKind::IO(e) => Some(&e),
+            ReaderErrorKind::StringParse(e) => Some(&e),
+            ReaderErrorKind::StringParse2(e) => Some(&e),
+            ReaderErrorKind::DecompressLz4(e) => Some(&e),
+            ReaderErrorKind::ParseInt(e) => Some(&e),
+            _ => None,
+        }
+    }
 }
 
 impl From<std::io::Error> for ReaderError {
